@@ -2,8 +2,8 @@
 #include <IntervalTimer.h>
 #include "DjiMotor.hpp"
 #include "PID.h"
-#include "ControllerInput.h"
 #include "IMU.h"
+#include "ControllerInput.h"
 #include <array>
 #include <cmath>
 
@@ -60,7 +60,7 @@ float speedX = 0.0f;  // [m/s] X方向の線速度
 float speedY = 0.0f;  // [m/s] Y方向の線速度
 
 // エンコーダー仕様と計算定数
-const float ENCODER_RESOLUTION = 100.0f;    // パルス/回転 (PPR)
+const float ENCODER_RESOLUTION = 360.0f;    // パルス/回転 (PPR)
 const float WHEEL_DIAMETER = 0.038f;        // ホイール直径 [m] (38mm)
 const float WHEEL_CIRCUMFERENCE = PI * WHEEL_DIAMETER; // 円周 [m]
 const uint32_t SPEED_UPDATE_INTERVAL = 10; // 速度更新間隔 [ms]
@@ -76,18 +76,10 @@ FlexCAN_T4<CAN2, RX_SIZE_256, TX_SIZE_16> can2;
 DjiMotorCan<CAN2> steer_motors(can2, 72.0f);  // 72:1 ギア比で初期化
 DjiMotorCan<CAN1> wheel_motors(can1, 19.0f);  // 19:1 ギア比で初期化
 
-ControllerInput controller(Serial5);
+ControllerInput controller(Serial);
 IntervalTimer motorControlTimer;
 
 uint8_t myBoardId = 1;
-
-float vx = 0;
-float vy = 0;
-float wz = 0;
-
-float cmdVx = 0;
-float cmdVy = 0;
-float cmdWz = 0;
 
 struct PidParam {
     float kp, ki, kd;
@@ -123,14 +115,6 @@ Pid WheelSpeedPid[4] = {
     Pid(1600, 0, 10, -14000.0, 14000.0, 1), // wheel 2
     Pid(1600, 0, 10, -14000.0, 14000.0, 1), // wheel 3
 };
-
-// 車体速度用 PID
-Pid MainBodySpeedPid[3] = {
-    Pid(0.3, 0, 0, -2000.0, 2000.0, 50), // vx
-    Pid(0.3, 0, 0, -2000.0, 2000.0, 50), // vy
-    Pid(0.3, 0, 0, -1500.0, 1500.0, 50) // wz
-};
-
 
 inline void steer_angleControl(size_t idx, float targetAngle, bool bounded, DjiMotorCan<CAN2> &motors) {
     const auto &fb = motors.feedback(idx + 1);
@@ -168,20 +152,6 @@ inline void wheel_speedControl(size_t idx, float targetSpeed, DjiMotorCan<CAN1> 
 
     int16_t speedCmd = WheelSpeedPid[idx].compute(fb.getSpeedRadiansPerSec(), targetSpeed); // ← 修正
     motors.sendCurrent(idx + 1, speedCmd);
-}
-
-float getSpeedX();
-float getSpeedY();
-float getOmega();
-
-inline void MainBody_speedControl(float targetSpeedX,float targetSpeedY, float targetOmega) {
-    float collection_vx = MainBodySpeedPid[0].compute(getSpeedX(), targetSpeedX);
-    float collection_vy = MainBodySpeedPid[1].compute(getSpeedY(), targetSpeedY);
-    float collection_wz = MainBodySpeedPid[2].compute(getOmega(), targetOmega);
-
-    cmdVx = collection_vx;
-    cmdVy = collection_vy;
-    cmdWz = collection_wz;
 }
 
 
@@ -256,10 +226,13 @@ std::array<WheelCommand, NUM_WHEELS> ik(float vx, float vy, float wz) {
     return wheelCommands;
 }
 
+float vx = 0;
+float vy = 0;
+float wz = 0;
+
 void ISR() {
     // Inverse kinematics to per-wheel targets.
     const auto wheelCommands = ik(vx, vy, wz);
-    //const auto wheelCommands = ik(cmdVx, cmdVy, cmdWz);
 
     // Monitor IK outputs.
     // Serial.printf("vx:%.3f vy:%.3f wz:%.3f\n", vx, vy, wz);
@@ -298,9 +271,6 @@ void homing(){
             else if(ls1) {
                 steer_speedControl(i, 2, steer_motors);
             }
-            // else if(ls2) {
-            //     steer_speedControl(i, -3, steer_motors);
-            // }
             else{
                 steer_speedControl(i, 20, steer_motors);
             }
@@ -376,16 +346,6 @@ float getSpeedY() {
     return speedY;
 }
 
-//IMUオブジェクト作成
-IMU_Manager imuManager;
-
-float getOmega() {
-    // IMUから角速度データを取得
-    IMU_Data_Vector3 imuGyro = imuManager.Get_IMU_GYRO();
-    
-    // X軸の角速度をラジアン毎秒に変換して返す
-    return imuGyro.x * (PI / 180.0); // [deg/s] → [rad/s]
-}
 
 uint8_t readBoardId() {
     uint8_t id = 0;
@@ -394,10 +354,31 @@ uint8_t readBoardId() {
     return id + 1; // 0-3 → 1-4
 }
 
+// 送信データの構造体定義
+struct RobotSensorPacket {
+    uint8_t header[2] = {0xAA, 0x55}; // データの開始合図
+    
+    // オドメトリデータ
+    float vx; // [m/s]
+    float vy; // [m/s]
+    float wz; // [rad/s]
+    
+    // IMUデータ (必要最低限のものを選択)
+    float accel_x, accel_y, accel_z; // [m/s^2]
+    float gyro_x, gyro_y, gyro_z;    // [rad/s]
+    float mag_x, mag_y, mag_z;       // [μT]
+    float yaw, pitch, roll;          // [degree]
+    
+    uint8_t checksum; // データが壊れていないか確認用
+} __attribute__((packed)); // 隙間なく詰め込む指定
+
+
+IMU_Manager imu_data;
+RobotSensorPacket packet;
 
 void setup() {
   Serial.begin(57600);
-  controller.begin(Serial5,115200);
+  controller.begin(Serial5, 115200);
   
   // DIPスイッチピン設定
   pinMode(DIP_PIN1, INPUT_PULLUP);
@@ -407,6 +388,8 @@ void setup() {
 
 // Board ID読み取り
   myBoardId = readBoardId();
+  Serial.printf("Board ID: %d\n", myBoardId);  
+
   pinMode(LSPIN11, INPUT_PULLUP);
   pinMode(LSPIN12, INPUT_PULLUP);
   pinMode(LSPIN21, INPUT_PULLUP);
@@ -420,25 +403,22 @@ void setup() {
   pinMode(ODOMETRY_Y_ENCODER_A_PIN, INPUT_PULLUP);
   pinMode(ODOMETRY_Y_ENCODER_B_PIN, INPUT_PULLUP);
 
-  // IMU初期化
-  if (!imuManager.begin()) {
-    Serial.println("IMU Error: BNO055 not detected on Wire1!");
-    // 必要ならここで無限ループに入れて停止させる
-    // while(1); 
-  } else {
-    Serial.println("IMU BNO055 Initialized Successfully.");
-  }
-
   // エンコーダー割り込み設定（立ち上がりのみ）
   // RISINGのみに設定されているが、ISRの実装は両方の変化を捕捉する四倍速エンコーディングに基づいているため、注意が必要
   attachInterrupt(digitalPinToInterrupt(ODOMETRY_X_ENCODER_A_PIN), encoderX_ISR, RISING);
   attachInterrupt(digitalPinToInterrupt(ODOMETRY_Y_ENCODER_A_PIN), encoderY_ISR, RISING);
 
+  // IMU初期化
+  if(!imu_data.begin()){
+      Serial.println("IMU initialization failed!");
+      // 失敗時の処理（必要に応じて）
+  }
+
 // モーター制御タイマー開始 (1kHz = 1000μs間隔)
   motorControlTimer.begin(ISR, 1000);
   motorControlTimer.priority(128);
 
-    homing();  
+    // homing();  
 }
 
 void loop() {
@@ -446,11 +426,47 @@ void loop() {
     updateOdometrySpeed();
 
     // シリアルモニタへ速度を出力
+    // Serial.printf("SpeedX: %.3f m/s, SpeedY: %.3f m/s\n", getSpeedX(), getSpeedY());
     static uint32_t last_tx = 0;
     if (millis() - last_tx >= 10) {            // 100 Hz
     last_tx = millis();
-    if (Serial5.availableForWrite() > 64) {   // 送れるときだけ
-        Serial5.printf("%.3f,%.3f,%.3f\n", getSpeedX(), getSpeedY(), wz);
+    if (Serial.availableForWrite() > 64) {   // 送れるときだけ
+        
+        // 1. データの詰め込み
+            packet.vx = getSpeedX();
+            packet.vy = getSpeedY();
+            packet.wz = wz;
+
+            auto a = imu_data.Get_IMU_ACCEL();
+            packet.accel_x = (float)a.x;
+            packet.accel_y = (float)a.y;
+            packet.accel_z = (float)a.z;
+
+            auto g = imu_data.Get_IMU_GYRO();
+            packet.gyro_x = (float)g.x;
+            packet.gyro_y = (float)g.y;
+            packet.gyro_z = (float)g.z;
+
+            auto m = imu_data.Get_IMU_MAG();
+            packet.mag_x = (float)m.x;
+            packet.mag_y = (float)m.y;
+            packet.mag_z = (float)m.z;
+
+            auto e = imu_data.Get_IMU_EULER();
+            packet.yaw   = (float)e.x;
+            packet.pitch = (float)e.y;
+            packet.roll  = (float)e.z;
+
+        //Serial.printf("%.3f,%.3f,%.3f\n", getSpeedX(), getSpeedY(), wz);
+        // 2. チェックサムの計算
+            uint8_t sum = 0;
+            uint8_t* ptr = (uint8_t*)&packet;
+            for(size_t i = 0; i < sizeof(packet) - 1; i++) {
+                sum += ptr[i];
+            }
+            packet.checksum = sum;              
+            // 3. バイナリ送信
+            Serial.write(ptr, sizeof(packet));
     }
     }
 
@@ -462,9 +478,9 @@ void loop() {
         //                 d.state, d.lx, d.ly, d.rx, d.ry, d.l2, d.r2, d.buttonsRaw);
 
         // Scale controller inputs to chassis velocities.
-        vx = (d.ly / kStickMax) * kMaxLinear;
-        vy = (d.lx / kStickMax) * kMaxLinear;
-        wz = (d.rx / kStickMax) * kMaxYawRate;
+        vx = d.ly* kMaxLinear;
+        vy = d.lx* kMaxLinear;
+        wz = d.rx* kMaxYawRate;
 
 
         if (d.buttons.triangle) {
@@ -472,8 +488,10 @@ void loop() {
             homing();
         }
     }
-
-    MainBody_speedControl(vx, vy, wz);
+    if(digitalRead(LSPIN11)){
+        imu_data.IMU_Reset();
+        Serial.println("IMU Reset executed");
+    }
     
     delay(10);
 }

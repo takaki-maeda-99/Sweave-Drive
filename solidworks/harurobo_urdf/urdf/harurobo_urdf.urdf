@@ -1,0 +1,899 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="harurobo_urdf">
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="2.67496045917338E-06 -4.56843672853348E-06 0.0631981020041447"
+        rpy="0 0 0" />
+      <mass
+        value="8.12607737966139" />
+      <inertia
+        ixx="0.0100114601886251"
+        ixy="9.27649637069347E-07"
+        ixz="7.43273886425444E-07"
+        iyy="0.0163995938038872"
+        iyz="-1.20100989829579E-07"
+        izz="0.0249323105882306" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://harurobo_urdf/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://harurobo_urdf/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="steer1">
+    <inertial>
+      <origin
+        xyz="-0.000131914075338635 -0.0122200983849752 -0.0416849527366612"
+        rpy="0 0 0" />
+      <mass
+        value="1.11397042751292" />
+      <inertia
+        ixx="0.000631499796138263"
+        ixy="-3.01039870726499E-06"
+        ixz="-5.35159180169525E-08"
+        iyy="0.000512110896770031"
+        iyz="-6.29881109906847E-07"
+        izz="0.000793070567248552" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://harurobo_urdf/meshes/steer1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://harurobo_urdf/meshes/steer1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="steer1_joint"
+    type="continuous">
+    <origin
+      xyz="0.207999999999968 -0.208000097092919 0.0875700189392067"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="steer1" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="7"
+      velocity="40" />
+  </joint>
+  <link
+    name="drive1">
+    <inertial>
+      <origin
+        xyz="1.91334549279332E-06 7.1029293557956E-13 -0.00311266095149038"
+        rpy="0 0 0" />
+      <mass
+        value="0.093012494318941" />
+      <inertia
+        ixx="5.68163374977129E-05"
+        ixy="2.29831116198836E-14"
+        ixz="-3.67740278694099E-09"
+        iyy="5.6630368123332E-05"
+        iyz="-8.66600723091956E-14"
+        izz="8.81040187352087E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://harurobo_urdf/meshes/drive1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 0.35" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://harurobo_urdf/meshes/drive1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="drive1_joint"
+    type="continuous">
+    <origin
+      xyz="0 0.0159999999998658 -0.0475700189392048"
+      rpy="1.5707963267949 0 -3.14159265358979" />
+    <parent
+      link="steer1" />
+    <child
+      link="drive1" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      effort="4.5"
+      velocity="52" />
+  </joint>
+  <link
+    name="steer2">
+    <inertial>
+      <origin
+        xyz="-0.000131914075338885 -0.0122200983849754 -0.0416849527366612"
+        rpy="0 0 0" />
+      <mass
+        value="1.11397042751292" />
+      <inertia
+        ixx="0.000631499796138263"
+        ixy="-3.01039870726439E-06"
+        ixz="-5.35159180162515E-08"
+        iyy="0.000512110896770031"
+        iyz="-6.29881109906686E-07"
+        izz="0.000793070567248552" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://harurobo_urdf/meshes/steer2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://harurobo_urdf/meshes/steer2.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="steer2_joint"
+    type="continuous">
+    <origin
+      xyz="0.207999999999971 0.207999902907081 0.0875700189392056"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="steer2" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="7"
+      velocity="40" />
+  </joint>
+  <link
+    name="drive2">
+    <inertial>
+      <origin
+        xyz="-1.91334549173861E-06 -7.1283257074839E-13 -0.00311266095149043"
+        rpy="0 0 0" />
+      <mass
+        value="0.0930124943189409" />
+      <inertia
+        ixx="5.68163374977128E-05"
+        ixy="2.29831101400819E-14"
+        ixz="3.67740278743847E-09"
+        iyy="5.66303681233319E-05"
+        iyz="8.66600648046698E-14"
+        izz="8.81040187352086E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://harurobo_urdf/meshes/drive2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 0.35" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://harurobo_urdf/meshes/drive2.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="drive2_joint"
+    type="continuous">
+    <origin
+      xyz="0 0.0159999999998657 -0.0475700189392048"
+      rpy="1.5707963267949 0 -3.14159265358979" />
+    <parent
+      link="steer2" />
+    <child
+      link="drive2" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      effort="4.5"
+      velocity="52" />
+  </joint>
+  <link
+    name="steer3">
+    <inertial>
+      <origin
+        xyz="-0.00013191407533894 -0.0122200983849753 -0.0416849527366612"
+        rpy="0 0 0" />
+      <mass
+        value="1.11397042751292" />
+      <inertia
+        ixx="0.000631499796138263"
+        ixy="-3.01039870726399E-06"
+        ixz="-5.35159180162424E-08"
+        iyy="0.000512110896770031"
+        iyz="-6.29881109906866E-07"
+        izz="0.000793070567248551" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://harurobo_urdf/meshes/steer3.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://harurobo_urdf/meshes/steer3.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="steer3_joint"
+    type="continuous">
+    <origin
+      xyz="-0.208000000000028 0.207999902907086 0.0875700189392073"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="steer3" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="7"
+      velocity="40" />
+  </joint>
+  <link
+    name="drive3">
+    <inertial>
+      <origin
+        xyz="-1.91334549168309E-06 -7.14775461041484E-13 -0.00311266095149038"
+        rpy="0 0 0" />
+      <mass
+        value="0.0930124943189411" />
+      <inertia
+        ixx="5.68163374977129E-05"
+        ixy="2.29831100443211E-14"
+        ixz="3.67740278744101E-09"
+        iyy="5.66303681233321E-05"
+        iyz="8.66600648809625E-14"
+        izz="8.81040187352087E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://harurobo_urdf/meshes/drive3.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 0.35" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://harurobo_urdf/meshes/drive3.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="drive3_joint"
+    type="continuous">
+    <origin
+      xyz="0 0.0159999999998658 -0.0475700189392048"
+      rpy="1.5707963267949 0 -3.14159265358978" />
+    <parent
+      link="steer3" />
+    <child
+      link="drive3" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      effort="4.5"
+      velocity="52" />
+  </joint>
+  <link
+    name="steer4">
+    <inertial>
+      <origin
+        xyz="-0.000131914075338829 -0.0122200983849753 -0.0416849527366611"
+        rpy="0 0 0" />
+      <mass
+        value="1.11397042751293" />
+      <inertia
+        ixx="0.000631499796138263"
+        ixy="-3.01039870726301E-06"
+        ixz="-5.35159180162301E-08"
+        iyy="0.000512110896770031"
+        iyz="-6.29881109906814E-07"
+        izz="0.000793070567248552" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://harurobo_urdf/meshes/steer4.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://harurobo_urdf/meshes/steer4.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="steer4_joint"
+    type="continuous">
+    <origin
+      xyz="-0.208000000000032 -0.208000097092915 0.0875700189392075"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="steer4" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="7"
+      velocity="40" />
+  </joint>
+  <link
+    name="drive4">
+    <inertial>
+      <origin
+        xyz="1.91334549271005E-06 7.09418634947667E-13 -0.00311266095149029"
+        rpy="0 0 0" />
+      <mass
+        value="0.093012494318941" />
+      <inertia
+        ixx="5.68163374977129E-05"
+        ixy="2.29831101520685E-14"
+        ixz="-3.67740278666812E-09"
+        iyy="5.6630368123332E-05"
+        iyz="-8.66600537156269E-14"
+        izz="8.81040187352087E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://harurobo_urdf/meshes/drive4.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 0.35" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://harurobo_urdf/meshes/drive4.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="drive4_joint"
+    type="continuous">
+    <origin
+      xyz="0 0.0159999999998658 -0.0475700189392048"
+      rpy="1.5707963267949 0 -3.14159265358978" />
+    <parent
+      link="steer4" />
+    <child
+      link="drive4" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      effort="4.5"
+      velocity="52" />
+  </joint>
+  <link
+    name="yaw">
+    <inertial>
+      <origin
+        xyz="-1.67087799125077E-05 -0.00617563548948005 0.156967295931179"
+        rpy="0 0 0" />
+      <mass
+        value="1.30092636553083" />
+      <inertia
+        ixx="0.00111457812748623"
+        ixy="7.43284198526836E-07"
+        ixz="-5.74105827120733E-07"
+        iyy="0.00176503755890846"
+        iyz="-1.26003348184023E-07"
+        izz="0.00122207295014221" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://harurobo_urdf/meshes/yaw.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://harurobo_urdf/meshes/yaw.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="yaw_joint"
+    type="revolute">
+    <origin
+      xyz="0 0 0.0895"
+      rpy="0 0 -3.1416" />
+    <parent
+      link="base_link" />
+    <child
+      link="yaw" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-3.14"
+      upper="3.14"
+      effort="60"
+      velocity="20" />
+  </joint>
+  <link
+    name="link1">
+    <inertial>
+      <origin
+        xyz="-3.86169301738164E-05 0.153820696132801 -0.0290964688020568"
+        rpy="0 0 0" />
+      <mass
+        value="0.413448883585382" />
+      <inertia
+        ixx="0.000801942890060389"
+        ixy="-3.10824357403203E-08"
+        ixz="-7.71963697131109E-09"
+        iyy="0.000193252266125794"
+        iyz="-4.93301152958948E-06"
+        izz="0.00094626586845113" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://harurobo_urdf/meshes/link1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://harurobo_urdf/meshes/link1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="link1_joint"
+    type="revolute">
+    <origin
+      xyz="0 -0.0355 0.2038"
+      rpy="1.5708 0 0" />
+    <parent
+      link="yaw" />
+    <child
+      link="link1" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-1.57"
+      upper="1.57"
+      effort="60"
+      velocity="20" />
+  </joint>
+  <link
+    name="link2">
+    <inertial>
+      <origin
+        xyz="-5.81656459177063E-05 0.17352915133823 0.0202636064078678"
+        rpy="0 0 0" />
+      <mass
+        value="0.335500467436985" />
+      <inertia
+        ixx="0.000832975299632838"
+        ixy="-3.13006982182821E-08"
+        ixz="-7.74753156936722E-09"
+        iyy="9.55872944932859E-05"
+        iyz="-1.44797410718399E-07"
+        izz="0.000915549886373291" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://harurobo_urdf/meshes/link2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://harurobo_urdf/meshes/link2.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="link2_joint"
+    type="revolute">
+    <origin
+      xyz="0 0.35 -0.043"
+      rpy="-3.1416 0 3.1416" />
+    <parent
+      link="link1" />
+    <child
+      link="link2" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-2.6"
+      upper="2.6"
+      effort="17"
+      velocity="40" />
+  </joint>
+  <link
+    name="link3">
+    <inertial>
+      <origin
+        xyz="0.000269309778735556 0.0335450952463393 0.0156819214252716"
+        rpy="0 0 0" />
+      <mass
+        value="0.187112293867213" />
+      <inertia
+        ixx="8.49841173814658E-05"
+        ixy="1.81382391226905E-07"
+        ixz="2.36693194540593E-08"
+        iyy="0.000100054160369426"
+        iyz="3.49984771337275E-07"
+        izz="9.9075305000463E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://harurobo_urdf/meshes/link3.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://harurobo_urdf/meshes/link3.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="link3_joint"
+    type="revolute">
+    <origin
+      xyz="0 0.35 0.001"
+      rpy="-3.1416 0 3.1416" />
+    <parent
+      link="link2" />
+    <child
+      link="link3" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-2.6"
+      upper="2.6"
+      effort="17"
+      velocity="40" />
+  </joint>
+  <link
+    name="wrist">
+    <inertial>
+      <origin
+        xyz="-6.12530859367411E-15 3.05311331771918E-16 0.0158403560576658"
+        rpy="0 0 0" />
+      <mass
+        value="0.570510900142287" />
+      <inertia
+        ixx="0.000359653671792427"
+        ixy="3.47069070799362E-09"
+        ixz="-2.22702544244164E-19"
+        iyy="0.000324392757746536"
+        iyz="-7.79517726499715E-18"
+        izz="0.000305564475837379" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://harurobo_urdf/meshes/wrist.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://harurobo_urdf/meshes/wrist.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="wrist_joint"
+    type="revolute">
+    <origin
+      xyz="0 0.1005 0.0085"
+      rpy="-1.5708 0 0" />
+    <parent
+      link="link3" />
+    <child
+      link="wrist" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-1.57"
+      upper="1.57"
+      effort="17"
+      velocity="40" />
+  </joint>
+  <link
+    name="lidar_front">
+    <inertial>
+      <origin
+        xyz="-0.000875942129414053 1.59517862275554E-06 -0.0184520674037893"
+        rpy="0 0 0" />
+      <mass
+        value="0.134971480140515" />
+      <inertia
+        ixx="7.17311397948797E-05"
+        ixy="3.61353684666094E-08"
+        ixz="-5.22609364901706E-07"
+        iyy="7.50102953432281E-05"
+        iyz="2.29503367509721E-09"
+        izz="4.71156230253611E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://harurobo_urdf/meshes/lidar_front.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://harurobo_urdf/meshes/lidar_front.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="lidar_front_joint"
+    type="fixed">
+    <origin
+      xyz="0.3052 0 0.0636"
+      rpy="3.1416 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="lidar_front" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="lidar_back">
+    <inertial>
+      <origin
+        xyz="-0.000875942129415663 1.59517862493783E-06 -0.0184520674037892"
+        rpy="0 0 0" />
+      <mass
+        value="0.134971480140515" />
+      <inertia
+        ixx="7.17311397948796E-05"
+        ixy="3.61353684667393E-08"
+        ixz="-5.22609364901725E-07"
+        iyy="7.50102953432279E-05"
+        iyz="2.2950336751094E-09"
+        izz="4.7115623025361E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://harurobo_urdf/meshes/lidar_back.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://harurobo_urdf/meshes/lidar_back.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="lidar_back_joint"
+    type="fixed">
+    <origin
+      xyz="-0.3052 0 0.0635999999999999"
+      rpy="-3.14159265358979 0 -3.14159265358976" />
+    <parent
+      link="base_link" />
+    <child
+      link="lidar_back" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+</robot>
